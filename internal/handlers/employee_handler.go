@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"sync"
 
+	"github.com/google/uuid"
 	"github.com/labstack/echo"
 	log "github.com/sirupsen/logrus"
 )
@@ -35,7 +36,6 @@ var httpContext = context.Background()
 
 func (handler *EmployeeHandler) AddEmployee(c echo.Context) error {
 	log.Info("Method: Add employee")
-	// Todo: Update it
 	ctx := context.WithValue(httpContext, "user.id", "")
 	requestBody := new(dto.EmployeeRequestDto)
 	bindErr := c.Bind(requestBody)
@@ -47,4 +47,19 @@ func (handler *EmployeeHandler) AddEmployee(c echo.Context) error {
 		return c.NoContent(http.StatusBadRequest)
 	}
 	return c.NoContent(http.StatusCreated)
+}
+
+func (handler *EmployeeHandler) DeleteEmployee(c echo.Context) error {
+	log.Info("Method: Delete employee")
+	ctx := context.WithValue(httpContext, "user.id", "")
+
+	employeeID, err := uuid.Parse(c.Param("id"))
+	if err != nil {
+		return c.NoContent(http.StatusBadRequest)
+	}
+	err = handler.IEmployeeService.DeleteEmployee(ctx, employeeID)
+	if err != nil {
+		return c.NoContent(http.StatusBadRequest)
+	}
+	return c.NoContent(http.StatusOK)
 }
