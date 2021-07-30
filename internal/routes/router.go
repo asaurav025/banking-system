@@ -12,7 +12,7 @@ type Route struct {
 
 func (r *Route) Init() {
 
-	employeeHandler, customerHandler := Factory().InjectDepencies()
+	employeeHandler, customerHandler, accountHandler := Factory().InjectDepencies()
 
 	applicationGroup := r.Router.Group("/banking-system")
 	{
@@ -28,7 +28,10 @@ func (r *Route) Init() {
 			v1.POST("/customer/add", customerHandler.AddCustomer)
 			v1.DELETE("/customer/:id", customerHandler.DeleteCustomer)
 			v1.GET("/customer/:id", customerHandler.GetCustomer)
-			v1.POST("/add/kyc/customer/:customerId", customerHandler.UpdateKyc)
+			v1.POST("/kyc/add/customer/:customerId", customerHandler.UpdateKyc)
+
+			v1.POST("/account/add", accountHandler.CreateAccount)
+			v1.GET("/account/:id/balance", accountHandler.GetBalance)
 		}
 	}
 
