@@ -16,6 +16,7 @@ import (
 )
 
 var db *gorm.DB
+var err error
 
 var initOnce sync.Once
 
@@ -31,7 +32,7 @@ func Init() {
 		maxOpenConnection := viper.GetInt("postgres.maxOpenConnection")
 		connectionMaxLifeTime := viper.GetInt("postgres.connMaxxLifetimeInHours")
 
-		db, err := gorm.Open("postgres", dbURI)
+		db, err = gorm.Open("postgres", dbURI)
 		if err != nil {
 			log.Error("Failed to connect to DB.", err)
 			os.Exit(1)
