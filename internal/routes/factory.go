@@ -11,13 +11,20 @@ import (
 
 type controller struct{}
 
-func (c *controller) InjectDepencies() *handlers.EmployeeHandler {
+func (c *controller) InjectDepencies() (*handlers.EmployeeHandler, *handlers.CustomerHandler) {
 	dbInstance := db.GetDB()
 	employeeRepo := repositories.NewEmployeeRepository(dbInstance)
-	employeeService := services.NewEmployeeService(employeeRepo)
-	employeeHandler := handlers.NewEmployeeHandler(employeeService)
+	customerRepo := repositories.NewCustomerRepository(dbInstance)
+	kycDetailsRepo := repositories.NewKycDetailsRepository(dbInstance)
 
-	return employeeHandler
+	employeeService := services.NewEmployeeService(employeeRepo)
+	customerService := services.NewCustomerService(customerRepo, kycDetailsRepo)
+	kycDetailsService := services.NewKycDetialsService(kycDetailsRepo)
+
+	employeeHandler := handlers.NewEmployeeHandler(employeeService)
+	customerHandler := handlers.NewCustomerHandler(customerService, kycDetailsService)
+
+	return employeeHandler, customerHandler
 }
 
 var controllerInstance *controller
