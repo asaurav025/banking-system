@@ -36,7 +36,7 @@ var httpContext = context.Background()
 
 func (handler *EmployeeHandler) AddEmployee(c echo.Context) error {
 	log.Info("Method: Add employee")
-	ctx := context.WithValue(httpContext, "user.id", "")
+	ctx := context.WithValue(httpContext, USER_ID, "")
 	requestBody := new(dto.EmployeeRequestDto)
 	bindErr := c.Bind(requestBody)
 	if bindErr != nil {
@@ -51,7 +51,7 @@ func (handler *EmployeeHandler) AddEmployee(c echo.Context) error {
 
 func (handler *EmployeeHandler) DeleteEmployee(c echo.Context) error {
 	log.Info("Method: Delete employee")
-	ctx := context.WithValue(httpContext, "user.id", "")
+	ctx := context.WithValue(httpContext, USER_ID, "")
 
 	employeeID, err := uuid.Parse(c.Param("id"))
 	if err != nil {
