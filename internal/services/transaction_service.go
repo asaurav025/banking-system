@@ -12,6 +12,7 @@ import (
 	"banking-system/internal/models"
 
 	"github.com/google/uuid"
+	log "github.com/sirupsen/logrus"
 )
 
 type transactionService struct {
@@ -47,13 +48,16 @@ func (service *transactionService) Create(ctx context.Context, item *dto.CreateT
 	transaction.CreatedBy = ctx.Value("user.id").(string)
 	destinationId, err := uuid.Parse(item.Destination)
 	if err != nil {
+		log.Error("Destination id incorrect")
 		return nil, err
 	}
 	destinationAccount, err := service.iAccountRepository.Find(ctx, destinationId)
 	if err != nil {
+		log.Error("Failed to fetch destination account")
 		return nil, err
 	}
 	if len(*destinationAccount) == 0 {
+		log.Error("Failed to fetch destination account")
 		return nil, errors.New("destination account not present")
 	}
 	destinationAccount0 := (*destinationAccount)[0]
@@ -64,24 +68,29 @@ func (service *transactionService) Create(ctx context.Context, item *dto.CreateT
 	} else {
 		sourceId, err := uuid.Parse(item.Source)
 		if err != nil {
+			log.Error("Source account id incorrect")
 			return nil, err
 		}
 		transaction.SourceID = sourceId
 		sourceAccount, err := service.iAccountRepository.Find(ctx, sourceId)
 		if err != nil {
+			log.Error("Failed to fetch source account")
 			return nil, err
 		}
 		if len(*sourceAccount) == 0 {
+			log.Error("Failed to fetch source account")
 			return nil, errors.New("source account not available")
 		}
 		sourceAccount0 := (*sourceAccount)[0]
 
 		if sourceAccount0.Balance < transaction.Amount {
+			log.Error("Insufficient balance in source account")
 			return nil, errors.New("insufficient balance in source account")
 		}
 
 		err = service.iAccountRepository.UpdateBalance(ctx, sourceId, sourceAccount0.Balance-transaction.Amount)
 		if err != nil {
+			log.Error("Transaction Failed")
 			return nil, err
 		}
 

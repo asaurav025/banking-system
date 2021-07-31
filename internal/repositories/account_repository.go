@@ -52,11 +52,14 @@ func (repo *accountRepository) UpdateBalance(ctx context.Context, id uuid.UUID, 
 	user := ctx.Value("user.id").(string)
 	response := repo.db.Model(&models.Account{}).Where(models.Account{
 		Common: models.Common{
+			Id: id,
+		},
+	}).Update(models.Account{
+		Common: models.Common{
 			Id:        id,
 			UpdatedBy: user,
 			UpdatedOn: time.Now(),
 		},
-	}).Update(models.Account{
 		Balance: balance,
 	})
 	if response.Error != nil {

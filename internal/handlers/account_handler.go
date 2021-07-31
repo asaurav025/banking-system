@@ -58,7 +58,7 @@ func (handler *AccountHandler) GetBalance(c echo.Context) error {
 	if err != nil {
 		return c.NoContent(http.StatusBadRequest)
 	}
-	return c.JSON(http.StatusCreated, &struct {
+	return c.JSON(http.StatusOK, &struct {
 		Balance uint `json:"balance"`
 	}{
 		Balance: acc.Balance,

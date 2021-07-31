@@ -5,6 +5,7 @@ import (
 	"banking-system/internal/interfaces/irepositories"
 	"banking-system/internal/models"
 	"context"
+	"errors"
 	"sync"
 
 	"github.com/google/uuid"
@@ -39,6 +40,7 @@ func (service *accountService) Create(ctx context.Context, item *dto.AccountRequ
 	account.Type = item.Type
 	account.Balance = 0
 	account.CreatedBy = ctx.Value("user.id").(string)
+	account.Unit = "INR"
 	acc, err := service.iAccountRepository.Create(ctx, account)
 	if err != nil {
 		return nil, err
@@ -51,6 +53,10 @@ func (service *accountService) GetAccount(ctx context.Context, id uuid.UUID) (*m
 	if err != nil {
 		log.Error("Failed to fetch customer details: ", err.Error())
 		return nil, err
+	}
+	if len(*accs) == 0 {
+		log.Error("Failed to fetch account")
+		return nil, errors.New("account not available")
 	}
 	acc := (*accs)[0]
 

@@ -6,8 +6,10 @@ import (
 	"banking-system/internal/models"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"sync"
+	"time"
 
 	"github.com/google/uuid"
 	log "github.com/sirupsen/logrus"
@@ -60,12 +62,11 @@ func (service *customerService) GetCustomer(ctx context.Context, id uuid.UUID) (
 		log.Error("Failed to fetch customer details: ", err.Error())
 		return dto.GetCustomerDetailsDTO{}, err
 	}
-	customer := (*customers)[0]
-	kycDetails, err := service.IKycDetailsRepository.Get(ctx, customer.KycDetailsId)
-	if err != nil {
-		log.Error("Failed to fetch KYC details: ", err.Error())
-		return dto.GetCustomerDetailsDTO{}, err
+	if len(*customers) == 0 {
+		log.Error("Failed to fetch customer details")
+		return dto.GetCustomerDetailsDTO{}, errors.New("Failed to fetch customer details")
 	}
+	customer := (*customers)[0]
 
 	var account models.CustomerAccount
 	err = json.Unmarshal([]byte(customer.AccountDetails), &account)
@@ -92,15 +93,23 @@ func (service *customerService) GetCustomer(ctx context.Context, id uuid.UUID) (
 
 		accountDetailsList = append(accountDetailsList, *accountDetails)
 	}
+	if customer.KycDetailsId != uuid.Nil {
+		kycDetails, err := service.IKycDetailsRepository.Get(ctx, customer.KycDetailsId)
+		if err != nil {
+			log.Error("Failed to fetch KYC details: ", err.Error())
+			return dto.GetCustomerDetailsDTO{}, err
+		}
+		kycDetails0 := (*kycDetails)[0]
 
-	kycDetails0 := (*kycDetails)[0]
+		response.KycDetails.GovtIDNumber = kycDetails0.GovtIdNumber
+		response.KycDetails.Status = kycDetails0.Status
+		response.KycDetails.Id = kycDetails0.Id
+		response.KycDetails.ExpiryDate = kycDetails0.ExpiryDate.String()
+	}
+
 	response.Id = customer.Id
 	response.Name = customer.Name
 	response.AccountDetails = accountDetailsList
-	response.KycDetails.GovtIDNumber = kycDetails0.GovtIdNumber
-	response.KycDetails.Status = kycDetails0.Status
-	response.KycDetails.Id = kycDetails0.Id
-	response.KycDetails.ExpiryDate = kycDetails0.ExpiryDate.String()
 	return *response, nil
 }
 func (service *customerService) UpdateName(ctx context.Context, name string) error {
@@ -135,8 +144,10 @@ func (service *customerService) AddAccount(ctx context.Context, id uuid.UUID, ac
 	}
 	customer.AccountDetails = string(temp)
 	customer.UpdatedBy = ctx.Value("user.id").(string)
+	customer.UpdatedOn = time.Now()
 	_, err = service.ICustomerRepository.Update(ctx, &customer)
 	if err != nil {
+		log.Error("Failed to get customer details")
 		return err
 	}
 	return nil
@@ -183,8 +194,10 @@ func (service *customerService) UpdateKyc(ctx context.Context, id uuid.UUID, kyc
 	item0 := (*items)[0]
 	item0.KycDetailsId = kycId
 	item0.UpdatedBy = ctx.Value("user.id").(string)
+	item0.UpdatedOn = time.Now()
 	_, err = service.ICustomerRepository.Update(ctx, &item0)
 	if err != nil {
+		log.Error("Failed to update customer")
 		return err
 	}
 	return nil
