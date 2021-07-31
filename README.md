@@ -1,5 +1,8 @@
 # Banking-System
 
+ - Language: Golang
+ - Framework: Echo
+
 ## Prerequisite
 - Update config file ``(pkg/config/config.json)`` with required credentials, 
 - Create new database ``banking-system`` in postgress
@@ -54,10 +57,8 @@
  - Configuration package enables configuring of variable
  - JWT module is reponsible for creation and verification of jwt tokens
 
-## Postman collection
-- refer file : ``source/Banking System.postman_collection.json``
-
-
+## API documents
+ - [Postman collection] (/source/Banking System.postman_collection.json)
 
 ### Sample PDF
 
