@@ -5,6 +5,8 @@ import (
 	"banking-system/internal/interfaces/irepositories"
 	"banking-system/internal/models"
 	"context"
+	"encoding/json"
+	"fmt"
 	"sync"
 
 	"github.com/google/uuid"
@@ -14,6 +16,7 @@ import (
 type customerService struct {
 	ICustomerRepository   irepositories.ICustomerRepository
 	IKycDetailsRepository irepositories.IKycDetailsRepository
+	IAccountRepository    irepositories.IAccountRepository
 }
 
 // For Singleton
@@ -23,12 +26,14 @@ var customerServiceInstance *customerService
 func NewCustomerService(
 	customerRepo irepositories.ICustomerRepository,
 	kycDetailsRepo irepositories.IKycDetailsRepository,
+	accountRepo irepositories.IAccountRepository,
 ) *customerService {
 	if customerServiceInstance == nil {
 		customerServiceOnce.Do(func() {
 			customerServiceInstance = &customerService{
 				ICustomerRepository:   customerRepo,
 				IKycDetailsRepository: kycDetailsRepo,
+				IAccountRepository:    accountRepo,
 			}
 		})
 	}
@@ -61,10 +66,37 @@ func (service *customerService) GetCustomer(ctx context.Context, id uuid.UUID) (
 		log.Error("Failed to fetch KYC details: ", err.Error())
 		return dto.GetCustomerDetailsDTO{}, err
 	}
+
+	var account models.CustomerAccount
+	err = json.Unmarshal([]byte(customer.AccountDetails), &account)
+	if err != nil {
+		return dto.GetCustomerDetailsDTO{}, err
+	}
+	accountList := account.Accounts
+	var accountDetailsList []dto.AccountDetails
+	// todo: make it asynchronous
+	for _, accountId := range accountList {
+		id, _ := uuid.Parse(accountId)
+		val, err := service.IAccountRepository.Find(ctx, id)
+		if err != nil {
+			continue
+		}
+		if len(*val) == 0 {
+			continue
+		}
+		accountDetails := new(dto.AccountDetails)
+		val0 := (*val)[0]
+		accountDetails.Balance = fmt.Sprint(val0.Balance)
+		accountDetails.Type = val0.Type
+		accountDetails.Id = val0.Id
+
+		accountDetailsList = append(accountDetailsList, *accountDetails)
+	}
+
 	kycDetails0 := (*kycDetails)[0]
 	response.Id = customer.Id
 	response.Name = customer.Name
-	// response.AccountDetails = customer.AccountDetails
+	response.AccountDetails = accountDetailsList
 	response.KycDetails.GovtIDNumber = kycDetails0.GovtIdNumber
 	response.KycDetails.Status = kycDetails0.Status
 	response.KycDetails.Id = kycDetails0.Id
@@ -79,12 +111,67 @@ func (service *customerService) Deactivate(ctx context.Context, id uuid.UUID) er
 	service.ICustomerRepository.Delete(ctx, id)
 	return nil
 }
+
 func (service *customerService) AddAccount(ctx context.Context, id uuid.UUID, accountId uuid.UUID) error {
-	// To be impleneted
+	customers, err := service.ICustomerRepository.Find(ctx, id)
+	if err != nil {
+		log.Error("Failed to fetch customer details: ", err.Error())
+		return err
+	}
+	customer := (*customers)[0]
+	var account models.CustomerAccount
+	err = json.Unmarshal([]byte(customer.AccountDetails), &account)
+	if err != nil {
+		return err
+	}
+	accountList := account.Accounts
+	accountList = append(accountList, accountId.String())
+	accountList = removeDuplicateValues(accountList)
+	temp, err := json.Marshal(&models.CustomerAccount{
+		Accounts: accountList,
+	})
+	if err != nil {
+		return err
+	}
+	customer.AccountDetails = string(temp)
+	_, err = service.ICustomerRepository.Update(ctx, &customer)
+	if err != nil {
+		return err
+	}
 	return nil
 }
+
 func (service *customerService) RemoveAccount(ctx context.Context, id uuid.UUID, accountId uuid.UUID) error {
-	// To be impleneted
+	customers, err := service.ICustomerRepository.Find(ctx, id)
+	if err != nil {
+		log.Error("Failed to fetch customer details: ", err.Error())
+		return err
+	}
+	customer := (*customers)[0]
+	var account models.CustomerAccount
+	err = json.Unmarshal([]byte(customer.AccountDetails), &account)
+	if err != nil {
+		return err
+	}
+	accountList := account.Accounts
+	list := []string{}
+
+	for _, entry := range accountList {
+		if entry != accountId.String() {
+			list = append(list, entry)
+		}
+	}
+	temp, err := json.Marshal(&models.CustomerAccount{
+		Accounts: list,
+	})
+	if err != nil {
+		return err
+	}
+	customer.AccountDetails = string(temp)
+	_, err = service.ICustomerRepository.Update(ctx, &customer)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 func (service *customerService) UpdateKyc(ctx context.Context, id uuid.UUID, kycId uuid.UUID) error {
@@ -100,4 +187,17 @@ func (service *customerService) UpdateKyc(ctx context.Context, id uuid.UUID, kyc
 		return err
 	}
 	return nil
+}
+
+func removeDuplicateValues(stringSlice []string) []string {
+	keys := make(map[string]bool)
+	list := []string{}
+
+	for _, entry := range stringSlice {
+		if _, value := keys[entry]; !value {
+			keys[entry] = true
+			list = append(list, entry)
+		}
+	}
+	return list
 }
