@@ -2,7 +2,6 @@
     "name" : "banking-system",
     "property": {
         "service.name":"baking-system",
-        "service.port":"1323",
         "database.url":"localhost",
         "database.name":"banking-system",
         "database.schema":"banking-system",
