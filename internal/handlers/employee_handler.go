@@ -1,11 +1,14 @@
 package handlers
 
 import (
-	"banking-system/internal/dto"
-	"banking-system/internal/interfaces/iservices"
 	"context"
+	"fmt"
 	"net/http"
 	"sync"
+
+	"banking-system/internal/dto"
+	"banking-system/internal/interfaces/iservices"
+	"banking-system/pkg/jwt"
 
 	"github.com/google/uuid"
 	"github.com/labstack/echo"
@@ -62,4 +65,27 @@ func (handler *EmployeeHandler) DeleteEmployee(c echo.Context) error {
 		return c.NoContent(http.StatusBadRequest)
 	}
 	return c.NoContent(http.StatusOK)
+}
+
+func (handler *EmployeeHandler) Login(c echo.Context) error {
+	requestBody := new(dto.LoginDTO)
+	bindErr := c.Bind(requestBody)
+	if bindErr != nil {
+		log.Error("Failed to parse body")
+		return c.JSON(http.StatusBadRequest, bindErr.Error())
+	}
+	userId, err := handler.IEmployeeService.VerifyEmployee(httpContext, requestBody.Email, requestBody.Password)
+	if err != nil {
+		return c.NoContent(http.StatusForbidden)
+	}
+	var response dto.JwtCreationResponse
+	token, err := jwt.CreateToken(userId)
+	if err != nil {
+		log.Error("Failed to generate token")
+		return c.JSON(http.StatusBadRequest, err.Error())
+	}
+	response.Duration = fmt.Sprint(jwt.EXPIRES_AFTER)
+	response.Token = token
+
+	return c.JSON(http.StatusCreated, response)
 }
