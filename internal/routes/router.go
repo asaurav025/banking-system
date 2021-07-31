@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"banking-system/pkg/middleware/authentication"
 	"net/http"
 
 	"github.com/labstack/echo"
@@ -20,8 +21,11 @@ func (r *Route) Init() {
 			return c.JSON(http.StatusOK, "I am healthy")
 		})
 
-		v1 := applicationGroup.Group("/v1")
+		applicationGroup.POST("/login", employeeHandler.Login)
+
+		v1 := applicationGroup.Group("/v1", authentication.AuthenticationMiddleware())
 		{
+
 			v1.POST("/employee/add", employeeHandler.AddEmployee)
 			v1.DELETE("/employee/:id", employeeHandler.DeleteEmployee)
 
