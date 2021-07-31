@@ -58,7 +58,7 @@
  - JWT module is reponsible for creation and verification of jwt tokens
 
 ## API documents
- - [Postman collection] (/source/Banking System.postman_collection.json)
+ - [Postman collection] (source/Banking%20System.postman_collection.json)
 
 ### Sample PDF
 
