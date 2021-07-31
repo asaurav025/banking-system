@@ -53,3 +53,14 @@ func (repo *employeeRepository) FindByEmail(ctx context.Context, email string) (
 	}
 	return &customers, nil
 }
+
+func (repo *employeeRepository) FindById(ctx context.Context, id uuid.UUID) (*[]models.Employee, error) {
+	var customers []models.Employee
+	emp := new(models.Employee)
+	emp.Id = id
+	response := repo.db.Where(emp).Find(&customers)
+	if response.Error != nil {
+		return nil, response.Error
+	}
+	return &customers, nil
+}
