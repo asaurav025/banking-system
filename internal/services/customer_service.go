@@ -134,6 +134,7 @@ func (service *customerService) AddAccount(ctx context.Context, id uuid.UUID, ac
 		return err
 	}
 	customer.AccountDetails = string(temp)
+	customer.UpdatedBy = ctx.Value("user.id").(string)
 	_, err = service.ICustomerRepository.Update(ctx, &customer)
 	if err != nil {
 		return err
@@ -181,7 +182,7 @@ func (service *customerService) UpdateKyc(ctx context.Context, id uuid.UUID, kyc
 	}
 	item0 := (*items)[0]
 	item0.KycDetailsId = kycId
-
+	item0.UpdatedBy = ctx.Value("user.id").(string)
 	_, err = service.ICustomerRepository.Update(ctx, &item0)
 	if err != nil {
 		return err

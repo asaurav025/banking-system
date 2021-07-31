@@ -4,6 +4,7 @@ import (
 	"banking-system/internal/models"
 	"context"
 	"sync"
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/jinzhu/gorm"
@@ -48,9 +49,12 @@ func (repo *accountRepository) Find(ctx context.Context, id uuid.UUID) (*[]model
 }
 
 func (repo *accountRepository) UpdateBalance(ctx context.Context, id uuid.UUID, balance uint) error {
+	user := ctx.Value("user.id").(string)
 	response := repo.db.Model(&models.Account{}).Where(models.Account{
 		Common: models.Common{
-			Id: id,
+			Id:        id,
+			UpdatedBy: user,
+			UpdatedOn: time.Now(),
 		},
 	}).Update(models.Account{
 		Balance: balance,

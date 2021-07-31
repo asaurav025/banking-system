@@ -39,6 +39,7 @@ func (service *kycDetialsService) Create(ctx context.Context, item *dto.CreateKy
 	kyc.GovtIdNumber = item.GovtIDNumber
 	kyc.CreatedBy = ctx.Value("user.id").(string)
 	kyc.Status = "CREATED"
+	kyc.VerifiedBy = ctx.Value("user.id").(string)
 	layout := "2006-01-02"
 	t, err := time.Parse(layout, item.ExpiryDate)
 	if err != nil {

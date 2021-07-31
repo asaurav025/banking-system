@@ -47,9 +47,12 @@ func (repo *transactionRepository) GetTransaction(ctx context.Context, accountId
 }
 
 func (repo *transactionRepository) UpdateStatus(ctx context.Context, id uuid.UUID, status string, comment string) error {
+	user := ctx.Value("user.id").(string)
 	response := repo.db.Model(&models.Transaction{}).Where(models.Transaction{
 		Common: models.Common{
-			Id: id,
+			Id:        id,
+			UpdatedOn: time.Now(),
+			CreatedBy: user,
 		},
 	}).Update(models.Transaction{
 		Status:  status,

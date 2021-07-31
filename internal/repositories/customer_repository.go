@@ -4,6 +4,7 @@ import (
 	"banking-system/internal/models"
 	"context"
 	"sync"
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/jinzhu/gorm"
@@ -48,7 +49,8 @@ func (repo *customerRepository) Find(ctx context.Context, id uuid.UUID) (*[]mode
 func (repo *customerRepository) Update(ctx context.Context, item *models.Customer) (*models.Customer, error) {
 	response := repo.db.Model(&models.Customer{}).Where(models.Customer{
 		Common: models.Common{
-			Id: item.Id,
+			Id:        item.Id,
+			UpdatedOn: time.Now(),
 		},
 	}).Update(
 		item,
