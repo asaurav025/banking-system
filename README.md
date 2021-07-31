@@ -40,4 +40,6 @@
   - Calculate interest for the money annually (at 3.5% p.a.) and update the account balance.
 
 ### Sample PDF
-<img src="https://raw.githubusercontent.com/asaurav025/banking-system/sample_pdf.jpg" >
+<img src="sample_pdf.jpg" >
+
+
