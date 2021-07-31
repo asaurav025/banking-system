@@ -39,7 +39,10 @@
   - Print Account statement of an account for a time range in pdf.
   - Calculate interest for the money annually (at 3.5% p.a.) and update the account balance.
 
+## Project Structure
+    
+
 ### Sample PDF
-<img src="sample_pdf.jpg" >
+<img src="source/sample_pdf.jpg" >
 
 
