@@ -36,12 +36,27 @@ func NewEmployeeService(
 }
 
 func (service *employeeService) AddEmployee(ctx context.Context, item *dto.EmployeeRequestDto) (interface{}, error) {
-	// Todo : add check for admin
+	userId, _ := uuid.Parse(ctx.Value("user.id").(string))
+	emps, err := service.iEmployeeRepository.FindById(ctx, userId)
+	if err != nil {
+		log.Error("Failed to fetch employee")
+		return nil, err
+	}
+	if len(*emps) == 0 {
+		log.Error("No employee found")
+		return nil, errors.New("no employee found")
+	}
+	emp0 := (*emps)[0]
+
+	if emp0.Type != "ADMIN" {
+		log.Error("employee not authorized")
+		return nil, errors.New("not authorized")
+	}
 
 	employee := new(models.Employee)
 	employee.Id = uuid.New()
 	employee.Type = "GENERAL"
-	employee.CreatedBy = ctx.Value("user.id").(string)
+	employee.CreatedBy = emp0.Email
 	employee.Email = item.Email
 	employee.Name = item.Name
 	employee.Password = b64.StdEncoding.EncodeToString([]byte(item.Password))
@@ -53,7 +68,21 @@ func (service *employeeService) AddEmployee(ctx context.Context, item *dto.Emplo
 }
 
 func (service *employeeService) DeleteEmployee(ctx context.Context, id uuid.UUID) error {
-	// Todo: add check for admin
+	userId, _ := uuid.Parse(ctx.Value("user.id").(string))
+	emps, err := service.iEmployeeRepository.FindById(ctx, userId)
+	if err != nil {
+		log.Error("Failed to fetch employee")
+		return err
+	}
+	if len(*emps) == 0 {
+		log.Error("No employee found")
+		return errors.New("no employee found")
+	}
+	emp0 := (*emps)[0]
+
+	if emp0.Type != "ADMIN" {
+		return errors.New("not authorized")
+	}
 
 	return service.iEmployeeRepository.Delete(ctx, id)
 }
@@ -66,13 +95,13 @@ func (service *employeeService) VerifyEmployee(ctx context.Context, email string
 	}
 	if len(*emps) == 0 {
 		log.Error("Failed to get employee")
-		return "", errors.New("Employee not found")
+		return "", errors.New("employee not found")
 	}
 	emp := (*emps)[0]
 
 	if b64.StdEncoding.EncodeToString([]byte(password)) != emp.Password {
 		log.Error("Wrong credentilas")
-		return "", errors.New("Wrong credentials")
+		return "", errors.New("wrong credentials")
 	}
 	return emp.Id.String(), nil
 }
