@@ -29,6 +29,7 @@ func (r *Route) Init() {
 			v1.DELETE("/customer/:id", customerHandler.DeleteCustomer)
 			v1.GET("/customer/:id", customerHandler.GetCustomer)
 			v1.POST("/kyc/add/customer/:customerId", customerHandler.UpdateKyc)
+			v1.POST("/link/customer/:customerId/account/:accountId", customerHandler.LinkAccount)
 
 			v1.POST("/account/add", accountHandler.CreateAccount)
 			v1.GET("/account/:id/balance", accountHandler.GetBalance)
