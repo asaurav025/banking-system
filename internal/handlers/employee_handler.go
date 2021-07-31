@@ -39,7 +39,7 @@ var httpContext = context.Background()
 
 func (handler *EmployeeHandler) AddEmployee(c echo.Context) error {
 	log.Info("Method: Add employee")
-	ctx := context.WithValue(httpContext, USER_ID, "")
+	ctx := context.WithValue(httpContext, USER_ID, c.Get(USER_ID))
 	requestBody := new(dto.EmployeeRequestDto)
 	bindErr := c.Bind(requestBody)
 	if bindErr != nil {
@@ -47,14 +47,14 @@ func (handler *EmployeeHandler) AddEmployee(c echo.Context) error {
 	}
 	_, err := handler.IEmployeeService.AddEmployee(ctx, requestBody)
 	if err != nil {
-		return c.NoContent(http.StatusBadRequest)
+		return c.JSON(http.StatusBadRequest, err.Error())
 	}
 	return c.NoContent(http.StatusCreated)
 }
 
 func (handler *EmployeeHandler) DeleteEmployee(c echo.Context) error {
 	log.Info("Method: Delete employee")
-	ctx := context.WithValue(httpContext, USER_ID, "")
+	ctx := context.WithValue(httpContext, USER_ID, c.Get(USER_ID))
 
 	employeeID, err := uuid.Parse(c.Param("id"))
 	if err != nil {
@@ -62,7 +62,7 @@ func (handler *EmployeeHandler) DeleteEmployee(c echo.Context) error {
 	}
 	err = handler.IEmployeeService.DeleteEmployee(ctx, employeeID)
 	if err != nil {
-		return c.NoContent(http.StatusBadRequest)
+		return c.JSON(http.StatusBadRequest, err.Error())
 	}
 	return c.NoContent(http.StatusOK)
 }
