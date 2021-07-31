@@ -4,7 +4,7 @@
  - Framework: Echo
 
 ## Prerequisite
-- Update config file `(pkg/config/config.json)` with required credentials, 
+- Update config file `(pkg/config/config.json)` with required credentials
 - Create new database `banking-system` in postgress
 - Create new schema `banking-system` inside database
 - Add Admin user 
@@ -60,11 +60,17 @@
  - Configuration package enables configuring of variable
  - JWT module is reponsible for creation and verification of jwt tokens
 
+## Architecture
+<img src="source/arch.png" alt="Architecture" width="300" >
+
+ - Employee and customer are independent entity
+ - Account are associated with Customer
+ - KYC details are associated with Customer
+ - Transactions are associated with Accounts
+ - For the feature of depositing interest rate we have to setup a A CRON/Scheduler to be run every year.
 ## API documents
  - <a target="_blank" href="source/Banking System.postman_collection.json" download="postman_collection.json">Postman collection</a>
 
 ### Sample PDF
 
 <img src="source/sample_pdf.jpg" alt="Tranasction details" width="300">
-
-

@@ -1,0 +1,88 @@
+@startuml
+
+class Employee{
+    + id
+    + name
+    + type
+    + createdOn
+    + updatedOn
+    + createdBy
+    + updatedBy
+
+    + addEmployee()
+    + deleteEmployee()
+}
+
+class Customer {
+    + id
+    + name
+    + kycDetailsID
+    + AccountDetails : List
+    + createdOn
+    + updatedOn
+    + createdBy
+    + updatedBy
+    
+    + createCustomer()
+    + getcutomer()
+    + updateCustomer()
+    + deactivateCustomer()
+    + addAccount(accountId: uuid)
+    + removeAccount(account: uuid)
+    + updateKycId(kycId: uuid)
+}
+
+class Account {
+    + id
+    + type
+    + balance
+    + createdOn
+    + updatedOn
+    + createdBy
+    + updatedBy
+
+    + createAccount()
+    + getAccount()
+    + updateBalance(balance:uint)
+}
+
+class KYCDetails {
+    + id
+    + status
+    + govtIDNumber
+    + expiryDate
+    + verifiedBy
+    + createdOn
+    + updatedOn
+    + createdBy
+    + updatedBy
+
+    + addKycDetail()
+    + updateStatus()
+    + deleteKycDetails()
+}
+
+class Transaction {
+    + id
+    + type
+    + amount
+    + unit
+    + status
+    + sourceId
+    + destinationId
+    + comment
+    + createdOn
+    + updatedOn
+    + createdBy
+
+    + createTransaction()
+    + updateStatus()
+    + getTransaction()
+}
+
+Employee .. Customer
+Customer *-- Account
+Customer *-- KYCDetails
+Account *-- Transaction
+
+@enduml
