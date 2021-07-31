@@ -24,6 +24,8 @@ type transactionService struct {
 var transactionServiceOnce sync.Once
 var transactionServiceInstance *transactionService
 
+const RATE = 0.035
+
 func NewTransactionService(
 	transactionRepo irepositories.ITrasactionRepository,
 	accountRepo irepositories.IAccountRepository,
@@ -45,6 +47,7 @@ func (service *transactionService) Create(ctx context.Context, item *dto.CreateT
 	transaction.Id = uuid.New()
 	transaction.Unit = "INR"
 	transaction.Status = "CREATED"
+	transaction.Type = item.Type
 	transaction.CreatedBy = ctx.Value("user.id").(string)
 	destinationId, err := uuid.Parse(item.Destination)
 	if err != nil {
@@ -107,6 +110,33 @@ func (service *transactionService) Create(ctx context.Context, item *dto.CreateT
 
 	return trans, nil
 }
+
+func (service *transactionService) AddInterest(ctx context.Context, id uuid.UUID) error {
+	destinationAccount, err := service.iAccountRepository.Find(ctx, id)
+	if err != nil {
+		log.Error("Failed to fetch destination account")
+		return err
+	}
+	if len(*destinationAccount) == 0 {
+		log.Error("Failed to fetch destination account")
+		return errors.New("destination account not present")
+	}
+	destinationAccount0 := (*destinationAccount)[0]
+	interest := uint(float64(destinationAccount0.Balance) * RATE)
+
+	requestBody := new(dto.CreateTransactionDTO)
+	requestBody.Source = ""
+	requestBody.Destination = id.String()
+	requestBody.Amount = interest
+	requestBody.Type = "INTEREST"
+	_, err = service.Create(ctx, requestBody)
+	if err != nil {
+		log.Error("Failed to add interest")
+		return err
+	}
+	return nil
+}
+
 func (service *transactionService) UpdateStatus(ctx context.Context, id uuid.UUID) error {
 	return nil
 }

@@ -48,6 +48,23 @@ func (handler *TransactionHandler) CreateTransaction(c echo.Context) error {
 	return c.JSON(http.StatusCreated, trans)
 }
 
+func (handler *TransactionHandler) AddInterest(c echo.Context) error {
+	log.Info("Method: Create transaction")
+	ctx := context.WithValue(httpContext, USER_ID, c.Get(USER_ID))
+
+	destination := c.Param("id")
+	destinationId, err := uuid.Parse(destination)
+	if err != nil {
+		log.Error("Failed to parse cdestinationId: ", destination)
+		return c.NoContent(http.StatusBadRequest)
+	}
+	err = handler.ITransactionService.AddInterest(ctx, destinationId)
+	if err != nil {
+		return c.NoContent(http.StatusBadRequest)
+	}
+	return c.NoContent(http.StatusCreated)
+}
+
 func (handler *TransactionHandler) GetTransaction(c echo.Context) error {
 	log.Info("Mehtod: Get Transaction")
 	ctx := context.WithValue(httpContext, USER_ID, c.Get(USER_ID))

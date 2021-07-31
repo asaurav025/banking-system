@@ -40,6 +40,7 @@ func (r *Route) Init() {
 
 			v1.POST("/transaction/create", transactionHandler.CreateTransaction)
 			v1.GET("/transaction/account/:accountId/from/:from/to/:to", transactionHandler.GetTransaction)
+			v1.POST("/tranasction/interest/account/:id", transactionHandler.AddInterest)
 		}
 	}
 

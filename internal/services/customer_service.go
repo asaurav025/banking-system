@@ -64,7 +64,7 @@ func (service *customerService) GetCustomer(ctx context.Context, id uuid.UUID) (
 	}
 	if len(*customers) == 0 {
 		log.Error("Failed to fetch customer details")
-		return dto.GetCustomerDetailsDTO{}, errors.New("Failed to fetch customer details")
+		return dto.GetCustomerDetailsDTO{}, errors.New("failed to fetch customer details")
 	}
 	customer := (*customers)[0]
 
