@@ -10,7 +10,8 @@
 - Add Admin user 
     - sql
 
-    ```INSERT INTO "banking-system".employee (id,"name",email,"password","type",created_by,updated_by)
+    ```
+    INSERT INTO "banking-system".employee (id,"name",email,"password","type",created_by,updated_by)
         VALUES ('df7df0a1-0121-49d4-8ad8-9ede2d1fb12e'::uuid,'admin-user','admin@ska.com','dGVzdFBhc3N3b3Jk','ADMIN','system','system'
     ```
 
