@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Transaction report</title>
+        <style>
+          table,
+          th,
+          td {
+            padding: 10px;
+            border: 1px solid black;
+            border-collapse: collapse;
+          }
+        </style>
+      </head>
+    <body>
+        <h1>Transaction Report</h1>
+        <h2> Account id:{{.AccountID}}</h1>
+        <h3>From: {{.From.Format "02.01.2006 15:04"}}</h3>
+        <h3>To: {{.To.Format "02.01.2006 15:04"}}</h3>
+        <table>
+            <tr>
+                <th>Transaction ID</th>
+                <th>Type</th>
+                <th>Source/Desitnation</th>
+                <th>Amount (INR)</th>
+                <th>Time</th>  
+            </tr>
+        {{ range .Transactions }}
+            <tr>
+                <td>{{ .TransactionID }}</td>
+                <td>{{ .Type }}</td>
+                <td>{{ .AccountID }}</td>
+                <td>{{ .Amount }}</td>
+                <td>{{ .Time.Format "02.01.2006 15:04" }}</td>
+            </tr>
+        {{ end }}
+    </body>
+</html>
