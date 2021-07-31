@@ -36,8 +36,8 @@ func NewEmployeeService(
 }
 
 func (service *employeeService) AddEmployee(ctx context.Context, item *dto.EmployeeRequestDto) (interface{}, error) {
-	userId, _ := uuid.Parse(ctx.Value("user.id").(string))
-	emps, err := service.iEmployeeRepository.FindById(ctx, userId)
+	userEmail := ctx.Value("user.id").(string)
+	emps, err := service.iEmployeeRepository.FindByEmail(ctx, userEmail)
 	if err != nil {
 		log.Error("Failed to fetch employee")
 		return nil, err
@@ -56,7 +56,7 @@ func (service *employeeService) AddEmployee(ctx context.Context, item *dto.Emplo
 	employee := new(models.Employee)
 	employee.Id = uuid.New()
 	employee.Type = "GENERAL"
-	employee.CreatedBy = emp0.Email
+	employee.CreatedBy = userEmail
 	employee.Email = item.Email
 	employee.Name = item.Name
 	employee.Password = b64.StdEncoding.EncodeToString([]byte(item.Password))
@@ -68,8 +68,8 @@ func (service *employeeService) AddEmployee(ctx context.Context, item *dto.Emplo
 }
 
 func (service *employeeService) DeleteEmployee(ctx context.Context, id uuid.UUID) error {
-	userId, _ := uuid.Parse(ctx.Value("user.id").(string))
-	emps, err := service.iEmployeeRepository.FindById(ctx, userId)
+	userEmail := ctx.Value("user.id").(string)
+	emps, err := service.iEmployeeRepository.FindByEmail(ctx, userEmail)
 	if err != nil {
 		log.Error("Failed to fetch employee")
 		return err
