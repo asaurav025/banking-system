@@ -19,7 +19,7 @@ func (c *controller) InjectDepencies() (*handlers.EmployeeHandler, *handlers.Cus
 	accountRepo := repositories.NewAccountRepository(dbInstance)
 
 	employeeService := services.NewEmployeeService(employeeRepo)
-	customerService := services.NewCustomerService(customerRepo, kycDetailsRepo)
+	customerService := services.NewCustomerService(customerRepo, kycDetailsRepo, accountRepo)
 	kycDetailsService := services.NewKycDetialsService(kycDetailsRepo)
 	accountService := services.NewAccountService(accountRepo)
 
