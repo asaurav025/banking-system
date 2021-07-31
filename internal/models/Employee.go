@@ -8,9 +8,10 @@ import (
 
 type Employee struct {
 	Common
-	Name  string `gorm:"column:name"`
-	Email string `gorm:"column:email"`
-	Type  string `gorm:"column:type"`
+	Name     string `gorm:"column:name"`
+	Email    string `gorm:"column:email"`
+	Password string `gorm:"column:password"`
+	Type     string `gorm:"column:type"`
 }
 
 func (model *Employee) BeforeCreate(scope *gorm.Scope) (err error) {

@@ -42,3 +42,14 @@ func (repo *employeeRepository) Delete(ctx context.Context, id uuid.UUID) error 
 	response := repo.db.Delete(emp)
 	return response.Error
 }
+
+func (repo *employeeRepository) FindByEmail(ctx context.Context, email string) (*[]models.Employee, error) {
+	var customers []models.Employee
+	emp := new(models.Employee)
+	emp.Email = email
+	response := repo.db.Where(emp).Find(&customers)
+	if response.Error != nil {
+		return nil, response.Error
+	}
+	return &customers, nil
+}
