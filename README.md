@@ -67,7 +67,9 @@
  - Account are associated with Customer
  - KYC details are associated with Customer
  - Transactions are associated with Accounts
- - For the feature of depositing interest rate we have to setup a A CRON/Scheduler to be run every year.
+ - To Note
+   - For generating PDF file, I have create a html template, which can styled accordingly, which being converted to PDF.
+   - For the feature of depositing interest rate we have to setup a A CRON/Scheduler to be run every year.
 ## API documents
  - <a target="_blank" href="source/Banking System.postman_collection.json" download="postman_collection.json">Postman collection</a>
 
