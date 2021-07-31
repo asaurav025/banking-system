@@ -1,0 +1,581 @@
+{
+	"info": {
+		"_postman_id": "91889074-54f0-4f53-8b71-7d30a5c03ee6",
+		"name": "Banking System",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Health check",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:1323/banking-system/health",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "1323",
+					"path": [
+						"banking-system",
+						"health"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\":\"admin@ska.com\",\n    \"password\": \"testPassword\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:1323/banking-system/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "1323",
+					"path": [
+						"banking-system",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add employee",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYWRtaW5Ac2thLmNvbSIsImV4cCI6MTYyNzc0Njc2NSwiaXNzIjoiYmFua2luZy1zeXN0ZW0ifQ.ABJaKtlycd0WBop26tppSlSeOiAvbuH4TKwZvaMqdwY",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"saurav\",\n    \"email\":\"asaurav026@gmail.com\",\n    \"password\":\"testpass\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:1323/banking-system/v1/employee/add",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "1323",
+					"path": [
+						"banking-system",
+						"v1",
+						"employee",
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Employee",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYWRtaW5Ac2thLmNvbSIsImV4cCI6MTYyNzc0Njc2NSwiaXNzIjoiYmFua2luZy1zeXN0ZW0ifQ.ABJaKtlycd0WBop26tppSlSeOiAvbuH4TKwZvaMqdwY",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:1323/banking-system/v1/employee/:id",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "1323",
+					"path": [
+						"banking-system",
+						"v1",
+						"employee",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "fe5e3970-ae31-48f4-a5d1-4fbc3b15fd7f"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Customer",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYXNhdXJhdjAyNkBnbWFpbC5jb20iLCJleHAiOjE2Mjc3NDY4OTMsImlzcyI6ImJhbmtpbmctc3lzdGVtIn0.KtyoLSRkt3A3wBNHQFh5hbtI0-Y0qiGVrfYg6MayAzU",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\":\"Saurav\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:1323/banking-system/v1/customer/add",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "1323",
+					"path": [
+						"banking-system",
+						"v1",
+						"customer",
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Customer",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYXNhdXJhdjAyNkBnbWFpbC5jb20iLCJleHAiOjE2Mjc3NDY4OTMsImlzcyI6ImJhbmtpbmctc3lzdGVtIn0.KtyoLSRkt3A3wBNHQFh5hbtI0-Y0qiGVrfYg6MayAzU",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:1323/banking-system/v1/customer/:id",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "1323",
+					"path": [
+						"banking-system",
+						"v1",
+						"customer",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "f52090b4-48b5-487f-aeac-30ed5a3886ab"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update KYC",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYWRtaW5Ac2thLmNvbSIsImV4cCI6MTYyNzc0NzM4OSwiaXNzIjoiYmFua2luZy1zeXN0ZW0ifQ.WlWeTF5FM41KlApVJr81FAAVC7SwpO5D6ju1Z5WIBW8",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"govt_id_number\":\"1234567ssw\",\n    \"expiry_date\":\"2022-12-01\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:1323/banking-system/v1/kyc/add/customer/:customerId",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "1323",
+					"path": [
+						"banking-system",
+						"v1",
+						"kyc",
+						"add",
+						"customer",
+						":customerId"
+					],
+					"variable": [
+						{
+							"key": "customerId",
+							"value": "f86e85a0-d150-415f-a2b2-c92b0def4b66"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Account",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYWRtaW5Ac2thLmNvbSIsImV4cCI6MTYyNzc0NzM4OSwiaXNzIjoiYmFua2luZy1zeXN0ZW0ifQ.WlWeTF5FM41KlApVJr81FAAVC7SwpO5D6ju1Z5WIBW8",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"type\" :\"SAVING\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:1323/banking-system/v1/account/add",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "1323",
+					"path": [
+						"banking-system",
+						"v1",
+						"account",
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Link Account",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYWRtaW5Ac2thLmNvbSIsImV4cCI6MTYyNzc0NzM4OSwiaXNzIjoiYmFua2luZy1zeXN0ZW0ifQ.WlWeTF5FM41KlApVJr81FAAVC7SwpO5D6ju1Z5WIBW8",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:1323/banking-system/v1/link/customer/:customerId/account/:accountId",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "1323",
+					"path": [
+						"banking-system",
+						"v1",
+						"link",
+						"customer",
+						":customerId",
+						"account",
+						":accountId"
+					],
+					"variable": [
+						{
+							"key": "customerId",
+							"value": "fa2ab33d-34d9-4aa8-a3c4-b11be790f9bb"
+						},
+						{
+							"key": "accountId",
+							"value": "0a2dc9e9-89d1-45e0-ad16-6b8a35f55ef6"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get customer details",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNzRjY2ZlOGMtMGNlMy00Mzg5LWI0MGMtODQ1MTc3ZjkxNzdmIiwiZXhwIjoxNjI3NzQ0ODA0LCJpc3MiOiJiYW5raW5nLXN5c3RlbSJ9.dczEHjYWjV-oYERHyzbTPCuQlmP1vtaOslmENJm1koA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:1323/banking-system/v1/customer/:customerId",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "1323",
+					"path": [
+						"banking-system",
+						"v1",
+						"customer",
+						":customerId"
+					],
+					"variable": [
+						{
+							"key": "customerId",
+							"value": "fa2ab33d-34d9-4aa8-a3c4-b11be790f9bb"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Balance",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYWRtaW5Ac2thLmNvbSIsImV4cCI6MTYyNzc0NzM4OSwiaXNzIjoiYmFua2luZy1zeXN0ZW0ifQ.WlWeTF5FM41KlApVJr81FAAVC7SwpO5D6ju1Z5WIBW8",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:1323/banking-system/v1/account/:id/balance",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "1323",
+					"path": [
+						"banking-system",
+						"v1",
+						"account",
+						":id",
+						"balance"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "b2eedfa4-4736-4891-b3dd-48e41e4494c6"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Tranasction",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYWRtaW5Ac2thLmNvbSIsImV4cCI6MTYyNzc0NzM4OSwiaXNzIjoiYmFua2luZy1zeXN0ZW0ifQ.WlWeTF5FM41KlApVJr81FAAVC7SwpO5D6ju1Z5WIBW8",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"source\":\"ff94945d-738f-4416-af15-bbb2e5b37631\",\n    \"destination\":\"b2eedfa4-4736-4891-b3dd-48e41e4494c6\",\n    \"amount\": 100\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:1323/banking-system/v1/transaction/create",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "1323",
+					"path": [
+						"banking-system",
+						"v1",
+						"transaction",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add interest",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYWRtaW5Ac2thLmNvbSIsImV4cCI6MTYyNzc0NzM4OSwiaXNzIjoiYmFua2luZy1zeXN0ZW0ifQ.WlWeTF5FM41KlApVJr81FAAVC7SwpO5D6ju1Z5WIBW8",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"source\":\"ff94945d-738f-4416-af15-bbb2e5b37631\",\n    \"destination\":\"b2eedfa4-4736-4891-b3dd-48e41e4494c6\",\n    \"amount\": 100\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:1323/banking-system/v1/tranasction/interest/account/:id",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "1323",
+					"path": [
+						"banking-system",
+						"v1",
+						"tranasction",
+						"interest",
+						"account",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Transaction",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYWRtaW5Ac2thLmNvbSIsImV4cCI6MTYyNzc0NzM4OSwiaXNzIjoiYmFua2luZy1zeXN0ZW0ifQ.WlWeTF5FM41KlApVJr81FAAVC7SwpO5D6ju1Z5WIBW8",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"destination\":\"f6a98895-cac6-48de-8e30-d8d84aec53a1\",\n    \"amount\": 100\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:1323/banking-system/v1/transaction/account/:accountId/from/:from/to/:to",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "1323",
+					"path": [
+						"banking-system",
+						"v1",
+						"transaction",
+						"account",
+						":accountId",
+						"from",
+						":from",
+						"to",
+						":to"
+					],
+					"variable": [
+						{
+							"key": "accountId",
+							"value": "ff94945d-738f-4416-af15-bbb2e5b37631"
+						},
+						{
+							"key": "from",
+							"value": "2006-01-02T15:04:05.000Z"
+						},
+						{
+							"key": "to",
+							"value": "2022-01-02T15:04:05.000Z"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -9,7 +9,7 @@
 
     ``INSERT INTO "banking-system".employee (id,"name",email,"password","type",created_by,updated_by)
         VALUES ('df7df0a1-0121-49d4-8ad8-9ede2d1fb12e'::uuid,'admin-user','admin@ska.com','dGVzdFBhc3N3b3Jk','ADMIN','system','system'``
-    - Note: Pass word should be base64 encoded
+    - Note: Password should be base64 encoded
 
 - Install wkhtmltopdf using below command
   - ``sudo apt install wkhtmltopdf`` - for Ubuntu
@@ -40,9 +40,27 @@
   - Calculate interest for the money annually (at 3.5% p.a.) and update the account balance.
 
 ## Project Structure
-    
+
+<img src="source/Project Structure.png" alt="Project structure" width="500">
+
+ - Business Logic sits inside ``internal``.
+ - Independent module, which do not contain any business logic is in ``pkg`` folder
+ - All the Database calls are made through repository
+ - Service layer contains business logic
+ - Handler process incoming data and send it to service layer
+ - Router calls handler method
+ - Factory create instances of handlers and pass it to router
+ - Authentication is a middleware which enables authtication of API calls
+ - Configuration package enables configuring of variable
+ - JWT module is reponsible for creation and verification of jwt tokens
+
+## Postman collection
+- refer file : ``source/Banking System.postman_collection.json``
+
+
 
 ### Sample PDF
-<img src="source/sample_pdf.jpg" >
+
+<img src="source/sample_pdf.jpg" alt="Tranasction details" width="300">
 
 
