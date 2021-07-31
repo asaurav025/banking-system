@@ -30,11 +30,15 @@ func (model *Customer) BeforeCreate(scope *gorm.Scope) (err error) {
 func (model *Customer) AfterFind() error {
 	err := json.Unmarshal([]byte(model.AccountDetails), &model.AccountDetailsMap)
 	if err != nil {
-		err = json.Unmarshal([]byte(model.AccountDetails), &model.AccountDetailsKeyValueMap)
+		json.Unmarshal([]byte(model.AccountDetails), &model.AccountDetailsKeyValueMap)
 	}
-	return err
+	return nil
 }
 
 func (Customer) TableName() string {
 	return "customer"
+}
+
+type CustomerAccount struct {
+	Accounts []string `json:"accounts"`
 }
