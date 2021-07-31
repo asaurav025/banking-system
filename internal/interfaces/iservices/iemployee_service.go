@@ -10,4 +10,5 @@ import (
 type IEmployeeService interface {
 	AddEmployee(ctx context.Context, item *dto.EmployeeRequestDto) (interface{}, error)
 	DeleteEmployee(ctx context.Context, id uuid.UUID) error
+	VerifyEmployee(ctx context.Context, email string, password string) (string, error)
 }
