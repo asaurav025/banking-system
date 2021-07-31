@@ -35,7 +35,7 @@ func NewTransactionHandler(
 
 func (handler *TransactionHandler) CreateTransaction(c echo.Context) error {
 	log.Info("Method: Create transaction")
-	ctx := context.WithValue(httpContext, USER_ID, "")
+	ctx := context.WithValue(httpContext, USER_ID, c.Get(USER_ID))
 	requestBody := new(dto.CreateTransactionDTO)
 	bindErr := c.Bind(requestBody)
 	if bindErr != nil {
@@ -50,7 +50,7 @@ func (handler *TransactionHandler) CreateTransaction(c echo.Context) error {
 
 func (handler *TransactionHandler) GetTransaction(c echo.Context) error {
 	log.Info("Mehtod: Get Transaction")
-	ctx := context.WithValue(httpContext, USER_ID, "")
+	ctx := context.WithValue(httpContext, USER_ID, c.Get(USER_ID))
 	accountID, err := uuid.Parse(c.Param("accountId"))
 	if err != nil {
 		return c.NoContent(http.StatusBadRequest)

@@ -34,7 +34,7 @@ func NewAccountHandler(
 
 func (handler *AccountHandler) CreateAccount(c echo.Context) error {
 	log.Info("Method: Create account")
-	ctx := context.WithValue(httpContext, USER_ID, "")
+	ctx := context.WithValue(httpContext, USER_ID, c.Get(USER_ID))
 	requestBody := new(dto.AccountRequestDto)
 	bindErr := c.Bind(requestBody)
 	if bindErr != nil {
@@ -49,7 +49,7 @@ func (handler *AccountHandler) CreateAccount(c echo.Context) error {
 
 func (handler *AccountHandler) GetBalance(c echo.Context) error {
 	log.Info("Method: Get balance")
-	ctx := context.WithValue(httpContext, USER_ID, "")
+	ctx := context.WithValue(httpContext, USER_ID, c.Get(USER_ID))
 	accountId, err := uuid.Parse(c.Param("id"))
 	if err != nil {
 		return c.NoContent(http.StatusBadRequest)

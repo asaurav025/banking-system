@@ -74,12 +74,12 @@ func (handler *EmployeeHandler) Login(c echo.Context) error {
 		log.Error("Failed to parse body")
 		return c.JSON(http.StatusBadRequest, bindErr.Error())
 	}
-	userId, err := handler.IEmployeeService.VerifyEmployee(httpContext, requestBody.Email, requestBody.Password)
+	_, err := handler.IEmployeeService.VerifyEmployee(httpContext, requestBody.Email, requestBody.Password)
 	if err != nil {
 		return c.NoContent(http.StatusForbidden)
 	}
 	var response dto.JwtCreationResponse
-	token, err := jwt.CreateToken(userId)
+	token, err := jwt.CreateToken(requestBody.Email)
 	if err != nil {
 		log.Error("Failed to generate token")
 		return c.JSON(http.StatusBadRequest, err.Error())

@@ -40,7 +40,7 @@ func NewCustomerHandler(
 
 func (handler *CustomerHandler) AddCustomer(c echo.Context) error {
 	log.Info("Method: Add customer")
-	ctx := context.WithValue(httpContext, USER_ID, "")
+	ctx := context.WithValue(httpContext, USER_ID, c.Get(USER_ID))
 	requestBody := new(dto.CreateCustomerDTO)
 	bindErr := c.Bind(requestBody)
 	if bindErr != nil {
@@ -55,7 +55,7 @@ func (handler *CustomerHandler) AddCustomer(c echo.Context) error {
 
 func (handler *CustomerHandler) LinkAccount(c echo.Context) error {
 	log.Info("Method: Link accont")
-	ctx := context.WithValue(httpContext, USER_ID, "")
+	ctx := context.WithValue(httpContext, USER_ID, c.Get(USER_ID))
 	customerID, err := uuid.Parse(c.Param("customerId"))
 	if err != nil {
 		return c.NoContent(http.StatusBadRequest)
@@ -77,7 +77,7 @@ func (handler *CustomerHandler) LinkAccount(c echo.Context) error {
 
 func (handler *CustomerHandler) UpdateKyc(c echo.Context) error {
 	log.Info("Method: Update KYC")
-	ctx := context.WithValue(httpContext, USER_ID, "")
+	ctx := context.WithValue(httpContext, USER_ID, c.Get(USER_ID))
 	customerID, err := uuid.Parse(c.Param("customerId"))
 	if err != nil {
 		return c.NoContent(http.StatusBadRequest)
@@ -100,7 +100,7 @@ func (handler *CustomerHandler) UpdateKyc(c echo.Context) error {
 
 func (handler *CustomerHandler) GetCustomer(c echo.Context) error {
 	log.Info("Method: Get Customer data")
-	ctx := context.WithValue(httpContext, USER_ID, "")
+	ctx := context.WithValue(httpContext, USER_ID, c.Get(USER_ID))
 	custID := c.Param("id")
 	customerID, err := uuid.Parse(custID)
 	if err != nil {
@@ -116,7 +116,7 @@ func (handler *CustomerHandler) GetCustomer(c echo.Context) error {
 
 func (handler *CustomerHandler) DeleteCustomer(c echo.Context) error {
 	log.Info("Method: Delete customer")
-	ctx := context.WithValue(httpContext, USER_ID, "")
+	ctx := context.WithValue(httpContext, USER_ID, c.Get(USER_ID))
 
 	customerID, err := uuid.Parse(c.Param("id"))
 	if err != nil {
