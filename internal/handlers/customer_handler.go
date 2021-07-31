@@ -62,11 +62,13 @@ func (handler *CustomerHandler) LinkAccount(c echo.Context) error {
 	}
 	accountId, err := uuid.Parse(c.Param("accountId"))
 	if err != nil {
+		log.Error("Failed to parse account ID. Error: ", err.Error())
 		return c.NoContent(http.StatusBadRequest)
 	}
 
 	err = handler.ICustomerService.AddAccount(ctx, customerID, accountId)
 	if err != nil {
+		log.Error("Failed to Link customer. Error: ", err.Error())
 		return c.NoContent(http.StatusBadRequest)
 	}
 	return c.NoContent(http.StatusOK)
